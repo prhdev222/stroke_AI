@@ -406,7 +406,7 @@ SBP 130–140 mmHg</div></div>
         <div><b>Cloudflare Pages → Settings → Environment variables</b></div>
         <div style="margin-top:8px">🟢 <b>Free:</b></div>
         <div>• <code>GROQ_API_KEY</code> → <a href="https://console.groq.com" target="_blank">console.groq.com</a></div>
-        <div>• <code>GEMINI_API_KEY</code> → <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a></div>
+        <div>• <code>TOGETHER_API_KEY</code> → <a href="https://api.together.ai/settings/api-keys" target="_blank">api.together.ai</a></div>
         <div>• <code>OPENROUTER_API_KEY</code> → <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a></div>
         <div style="margin-top:6px">💳 <b>Paid (ใส่ Key ในแอป):</b></div>
         <div>• Claude → <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div>
@@ -431,8 +431,8 @@ let STEPS = [];        // สำหรับ sidebar
 const PRESETS=[
   {id:'groq',    name:'Groq · LLaMA 3.3 70B',     badge:'FREE',color:'#f97316',type:'proxy',
    envVar:'GROQ_API_KEY',   note:'LLaMA 3.3 70B · Server Key (Env)'},
-  {id:'gemini',  name:'Google Gemini 2.0 Flash',   badge:'FREE',color:'#4285f4',type:'proxy',
-   envVar:'GEMINI_API_KEY', note:'Gemini 2.0 Flash · Server Key (Env)'},
+  {id:'together',name:'Together AI · Llama 3.1 8B', badge:'FREE',color:'#22c55e',type:'proxy',
+   envVar:'TOGETHER_API_KEY', note:'Together AI · Server Key (Env)'},
   {id:'openrouter',name:'OpenRouter · Llama Free', badge:'FREE',color:'#7c3aed',type:'proxy',
    envVar:'OPENROUTER_API_KEY', note:'Llama 3.1 8B Free · Server Key (Env)'},
   {id:'claude',  name:'Claude · Haiku',            badge:'PAID',color:'#c0392b',type:'claude',

@@ -61,43 +61,6 @@ async function callOpenAICompatible({ endpoint, apiKey, model, messages }) {
   return data?.choices?.[0]?.message?.content || 'ไม่ได้รับคำตอบ';
 }
 
-function toGeminiContents(messages) {
-  // Gemini uses "contents": [{ role: "user"|"model", parts:[{text}]}]
-  // เราจะใส่ system prompt เข้าไปเป็นข้อความนำหน้าของ user เพื่อความง่าย
-  const merged = messages
-    .filter(m => m.role !== 'system')
-    .map(m => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }],
-    }));
-  return merged.length ? merged : [{ role: 'user', parts: [{ text: 'สวัสดี' }] }];
-}
-
-async function callGemini({ apiKey, model, messages }) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  const sys = messages.find(m => m.role === 'system')?.content || '';
-  const contents = toGeminiContents(messages);
-  // แทรก system prompt ไว้ด้านหน้าสุด
-  if (sys) {
-    contents.unshift({ role: 'user', parts: [{ text: sys }] });
-  }
-
-  const r = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents,
-      generationConfig: { maxOutputTokens: 900, temperature: 0.2 },
-    }),
-  });
-  const dataText = await r.text();
-  if (!r.ok) throw new Error(dataText || `HTTP ${r.status}`);
-  const data = JSON.parse(dataText);
-  const parts = data?.candidates?.[0]?.content?.parts;
-  const text = Array.isArray(parts) ? parts.map(p => p?.text || '').join('') : '';
-  return text || 'ไม่ได้รับคำตอบ';
-}
-
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -134,11 +97,12 @@ export async function onRequestPost(context) {
       return json({ reply });
     }
 
-    if (provider === 'gemini') {
-      if (!env.GEMINI_API_KEY) return json({ error: 'ยังไม่ได้ตั้งค่า GEMINI_API_KEY ใน Cloudflare Pages (Environment Variables/Secrets)' }, { status: 400 });
-      const reply = await callGemini({
-        apiKey: env.GEMINI_API_KEY,
-        model: 'gemini-2.0-flash',
+    if (provider === 'together') {
+      if (!env.TOGETHER_API_KEY) return json({ error: 'ยังไม่ได้ตั้งค่า TOGETHER_API_KEY ใน Cloudflare Pages (Environment Variables/Secrets)' }, { status: 400 });
+      const reply = await callOpenAICompatible({
+        endpoint: 'https://api.together.xyz/v1/chat/completions',
+        apiKey: env.TOGETHER_API_KEY,
+        model: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
         messages,
       });
       return json({ reply });
