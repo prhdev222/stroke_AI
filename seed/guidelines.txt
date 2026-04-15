@@ -1,4 +1,4 @@
-แนวทาง Stroke รพ.สงฆ์ มี.ค.68:
+แนวทาง Stroke รพ.สงฆ์ มี.ค.69:
 BEFAST: B=เวียนหัวเดินเซ E=ตาพร่า F=ปากเบี้ยว A=แขนขาอ่อนแรง S=พูดไม่ชัด T=เวลาตั้งแต่เริ่มอาการ
 VAN(LVO): V=ตามัวเฉียบพลัน A=Aphasia N=Neglect
 ขั้นตอน: activate fast track→V/S,N/S→lab(DTX,CBC,elyte,coag,EKG)→NIHSS→CT+CXR
