@@ -113,7 +113,7 @@ export async function onRequestPost(context) {
 
   try {
     if (provider === 'groq') {
-      if (!env.GROQ_API_KEY) throw new Error('Missing GROQ_API_KEY');
+      if (!env.GROQ_API_KEY) return json({ error: 'ยังไม่ได้ตั้งค่า GROQ_API_KEY ใน Cloudflare Pages (Environment Variables/Secrets)' }, { status: 400 });
       const reply = await callOpenAICompatible({
         endpoint: 'https://api.groq.com/openai/v1/chat/completions',
         apiKey: env.GROQ_API_KEY,
@@ -124,7 +124,7 @@ export async function onRequestPost(context) {
     }
 
     if (provider === 'openrouter') {
-      if (!env.OPENROUTER_API_KEY) throw new Error('Missing OPENROUTER_API_KEY');
+      if (!env.OPENROUTER_API_KEY) return json({ error: 'ยังไม่ได้ตั้งค่า OPENROUTER_API_KEY ใน Cloudflare Pages (Environment Variables/Secrets)' }, { status: 400 });
       const reply = await callOpenAICompatible({
         endpoint: 'https://openrouter.ai/api/v1/chat/completions',
         apiKey: env.OPENROUTER_API_KEY,
@@ -135,7 +135,7 @@ export async function onRequestPost(context) {
     }
 
     if (provider === 'gemini') {
-      if (!env.GEMINI_API_KEY) throw new Error('Missing GEMINI_API_KEY');
+      if (!env.GEMINI_API_KEY) return json({ error: 'ยังไม่ได้ตั้งค่า GEMINI_API_KEY ใน Cloudflare Pages (Environment Variables/Secrets)' }, { status: 400 });
       const reply = await callGemini({
         apiKey: env.GEMINI_API_KEY,
         model: 'gemini-2.0-flash',
