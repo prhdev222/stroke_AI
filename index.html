@@ -190,7 +190,9 @@ code{background:var(--bg3);padding:1px 6px;border-radius:3px;font-size:11px;colo
 
 @media(max-width:768px){
   :root{--sw:min(300px,88vw)}
-  #sidebar{position:fixed;left:0;top:0;bottom:0;z-index:60;width:0}
+  /* mobile: ให้ sidebar ไม่ทับ header เพื่อกด ☰ ปิดได้ */
+  #hdr{position:relative;z-index:120}
+  #sidebar{position:fixed;left:0;top:var(--hh);height:calc(100vh - var(--hh));bottom:auto;z-index:60;width:0}
   #sidebar:not(.closed){width:var(--sw)}
   .pname{max-width:80px}.ref-grid{grid-template-columns:1fr}
   #spanel{width:100vw}
@@ -200,8 +202,9 @@ code{background:var(--bg3);padding:1px 6px;border-radius:3px;font-size:11px;colo
   :root{--hh:52px}
   #hdr{padding:0 10px;gap:8px}
   .logo{width:34px;height:34px;border-radius:10px;font-size:17px}
-  .ttl-main{font-size:14px}
-  .ttl-sub{font-size:10px}
+  .ttl{min-width:0;overflow:hidden}
+  .ttl-main{font-size:14px;max-width:100%}
+  .ttl-sub{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
   .bico{width:32px;height:32px;border-radius:8px;font-size:14px}
   .psel{padding:5px 8px;max-width:52vw;flex-shrink:1;min-width:0}
   .pname{max-width:calc(52vw - 64px)}
