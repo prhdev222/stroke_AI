@@ -203,13 +203,23 @@ code{background:var(--bg3);padding:1px 6px;border-radius:3px;font-size:11px;colo
   .ttl-main{font-size:14px}
   .ttl-sub{font-size:10px}
   .bico{width:32px;height:32px;border-radius:8px;font-size:14px}
-  .psel{padding:5px 8px;max-width:56vw}
-  .pname{max-width:92px}
-  #pdrop{min-width:min(92vw,320px)}
+  .psel{padding:5px 8px;max-width:52vw;flex-shrink:1;min-width:0}
+  .pname{max-width:calc(52vw - 64px)}
+  /* mobile: dropdown ต้องมองเห็นเต็มจอ + scroll ได้ */
+  #pdrop{
+    position:fixed;
+    left:10px;right:10px;
+    top:calc(var(--hh) + 6px);
+    min-width:unset;
+    max-width:calc(100vw - 20px);
+    max-height:min(60vh,520px);
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+  }
 
   #chat{padding:14px 10px}
   #empty{gap:14px;padding:18px}
-  .e-ico{font-size:40px}
+  .e-ico{width:84px;height:84px;border-radius:18px}
   .e-t{font-size:16px}
   .e-s{font-size:12px;max-width:340px}
   .ref-grid{gap:8px;max-width:420px}
@@ -233,6 +243,7 @@ code{background:var(--bg3);padding:1px 6px;border-radius:3px;font-size:11px;colo
   .disc-title{font-size:17px}
   .disc-item{padding:12px 13px}
   .disc-check-row{padding:10px 12px}
+  .toast{max-width:92vw;white-space:normal;text-align:center}
 }
 
 /* ── DISCLAIMER MODAL ── */
@@ -362,7 +373,7 @@ code{background:var(--bg3);padding:1px 6px;border-radius:3px;font-size:11px;colo
   <div class="logo"><img src="neurologist.png" alt="AI"></div>
   <div class="ttl">
     <div class="ttl-main">Stroke Fast Track AI</div>
-    <div class="ttl-sub">โรงพยาบาลสงฆ์ · มี.ค. 68</div>
+    <div class="ttl-sub">โรงพยาบาลสงฆ์</div>
   </div>
   <div class="psel" id="psel">
     <div class="pdot" id="hdot" style="background:#4a7a9b"></div>
@@ -413,7 +424,7 @@ SBP 130–140 mmHg</div></div>
         <div class="inbox"><textarea id="inta" rows="1" placeholder="ถามเกี่ยวกับแนวทาง Stroke รพ.สงฆ์… (Enter ส่ง · Shift+Enter ขึ้นบรรทัด)"></textarea></div>
         <button id="sbtn" disabled>➤</button>
       </div>
-      <div class="infoot">แนวทาง รพ.สงฆ์ มี.ค. 68 · กรณีฉุกเฉินให้ปรึกษาอายุรแพทย์ประสาทวิทยา</div>
+      <div class="infoot">แนวทาง รพ.สงฆ์ · กรณีฉุกเฉินให้ปรึกษาอายุรแพทย์ประสาทวิทยา</div>
     </div>
   </div>
 </div>
