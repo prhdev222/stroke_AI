@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stroke Fast Track AI · รพ.สงฆ์</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0b1929;--bg2:#0d2038;--bg3:#102845;--bg4:#142f52;
+  --border:#1a3a5c;--border2:#1f4570;
+  --text:#c8dff0;--text2:#7aafcf;--text3:#4a7a9b;--text4:#2a5075;
+  --accent:#1e6abf;--accentH:#2577d4;
+  --green:#2ecc71;--red:#e74c3c;--purple:#9b59b6;
+  --sw:300px;--hh:58px;
+}
+[data-theme="light"]{
+  --bg:#f4f8ff;--bg2:#ffffff;--bg3:#f0f5ff;--bg4:#e7f0ff;
+  --border:#d5e2f5;--border2:#c7d7ef;
+  --text:#0f2a44;--text2:#1f3e5c;--text3:#4f6c88;--text4:#6b87a1;
+  --accent:#1e6abf;--accentH:#2577d4;
+  --green:#1f9d5b;--red:#c0392b;--purple:#6f42c1;
+}
+html,body{height:100%;overflow:hidden;overflow-x:hidden}
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+button,input,textarea,select{max-width:100%}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* HEADER */
+#hdr{height:var(--hh);background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0;z-index:20;min-width:0;overflow:hidden}
+.logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#1e5799,#c0392b);
+  display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.ttl{flex:1;min-width:0}
+.ttl-main{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl-sub{font-size:11px;color:var(--text3)}
+.psel{display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;padding:6px 10px;cursor:pointer;position:relative;flex-shrink:0;user-select:none;max-width:55vw}
+.pdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.pname{font-size:12px;color:var(--text2);white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis}
+.pbadge{font-size:9px;padding:1px 5px;border-radius:4px;font-weight:700;flex-shrink:0}
+.free{background:rgba(46,204,113,.15);color:var(--green)}
+.paid{background:rgba(231,76,60,.15);color:var(--red)}
+.custom{background:rgba(155,89,182,.15);color:var(--purple)}
+.bico{width:34px;height:34px;border:1px solid var(--border);border-radius:8px;background:var(--bg3);
+  color:var(--text2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;flex-shrink:0;font-family:inherit}
+.bico:hover{background:var(--bg4);color:var(--text)}
+
+/* Provider dropdown */
+#pdrop{position:absolute;top:calc(100% + 6px);right:0;min-width:280px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:12px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);z-index:200;overflow:hidden;display:none}
+#pdrop.open{display:block}
+.pdi{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;
+  transition:background .2s;border-bottom:1px solid rgba(26,58,92,.4)}
+.pdi:last-child{border-bottom:none}
+.pdi:hover{background:var(--bg4)}.pdi.act{background:rgba(30,106,191,.15)}
+.pdi-info{flex:1;min-width:0}
+.pdi-n{font-size:13px;color:var(--text);font-weight:600}
+.pdi-s{font-size:11px;color:var(--text3)}
+.pdi-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.kok{font-size:10px;color:var(--green)}.kno{font-size:10px;color:var(--red)}.ksvr{font-size:10px;color:#7abaff}
+
+/* LAYOUT */
+#layout{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+#sidebar{width:var(--sw);background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;transition:width .3s ease}
+#sidebar.closed{width:0}
+#sb-inner{width:var(--sw);height:100%;display:flex;flex-direction:column;overflow-y:auto}
+.sb-hd{padding:12px 16px 8px;font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;border-bottom:1px solid var(--border);flex-shrink:0}
+.sb-loading{padding:20px;text-align:center;color:var(--text3);font-size:12px}
+.sb-spin{display:inline-block;animation:spin 1s linear infinite}
+.ah{display:flex;align-items:center;gap:8px;padding:10px 16px;cursor:pointer;
+  transition:background .2s;border-bottom:1px solid var(--border)}
+.ah:hover{background:var(--bg3)}
+.ah-ico{font-size:16px;flex-shrink:0}.ah-lbl{font-size:13px;font-weight:600;color:var(--text2);flex:1}
+.ah-step{font-size:9px;color:var(--text4);background:var(--bg3);padding:1px 6px;border-radius:10px;flex-shrink:0}
+.ah-arr{font-size:10px;color:var(--text3);transition:transform .2s;flex-shrink:0}
+.ah.on .ah-arr{transform:rotate(90deg)}
+.ab{display:none;border-bottom:1px solid var(--border)}.ab.on{display:block}
+.aq{display:block;width:100%;text-align:left;padding:8px 14px 8px 38px;
+  font-size:12.5px;color:var(--text3);background:none;border:none;cursor:pointer;
+  transition:all .2s;border-bottom:1px solid rgba(26,58,92,.35);
+  line-height:1.55;font-family:'Sarabun',sans-serif}
+.aq:last-child{border-bottom:none}
+.aq:hover{background:var(--bg3);color:var(--text2);padding-left:44px}
+
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+#chat{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column}
+#empty{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:1;gap:18px;padding:24px;text-align:center}
+.e-ico{font-size:48px}.e-t{font-size:18px;font-weight:700}
+.e-s{font-size:13px;color:var(--text3);line-height:1.75;max-width:380px}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:480px}
+.rc{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;border-left:3px solid;text-align:left}
+.rc-l{font-size:11px;font-weight:700;margin-bottom:5px}
+.rc-d{font-size:11px;color:var(--text3);line-height:1.65;white-space:pre-line}
+
+/* Content loading indicator */
+#content-status{font-size:11px;text-align:center;padding:4px 0;display:none}
+#content-status.loading{display:block;color:var(--text3)}
+#content-status.updated{display:block;color:var(--green);animation:fu .3s ease}
+
+#msgs{display:none;flex-direction:column;gap:16px;max-width:740px;width:100%;margin:0 auto}
+.msg{display:flex;gap:10px;align-items:flex-start;animation:fu .3s ease}
+.msg.user{flex-direction:row-reverse}
+.mav{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;margin-top:2px}
+.mav.ai{background:linear-gradient(135deg,#1e5799,#c0392b)}
+.mav.user{background:var(--bg3);border:1px solid var(--border)}
+.mb{max-width:80%;padding:11px 15px;font-size:13.5px;line-height:1.75;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;border-radius:14px}
+.msg.ai .mb{background:var(--bg3);border:1px solid var(--border);border-radius:3px 14px 14px 14px;color:var(--text)}
+.msg.user .mb{background:linear-gradient(135deg,#1a4a7a,#1e5799);border-radius:14px 3px 14px 14px;color:#e8f4fd}
+.td{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;animation:bn 1.2s ease infinite}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+
+/* INPUT */
+#inbar{border-top:1px solid var(--border);background:var(--bg2);padding:12px 16px;flex-shrink:0}
+.inwrap{max-width:740px;margin:0 auto;display:flex;gap:10px;align-items:flex-end}
+.inbox{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:10px 14px;transition:border-color .2s}
+.inbox:focus-within{border-color:var(--accent)}
+#inta{width:100%;background:none;border:none;color:var(--text);font-size:13.5px;
+  font-family:'Sarabun',sans-serif;resize:none;line-height:1.6;max-height:120px;overflow-y:auto}
+#inta:focus{outline:none}
+#inta::placeholder{color:var(--text4)}
+#sbtn{width:42px;height:42px;border-radius:10px;border:none;background:var(--accent);color:#fff;
+  font-size:18px;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#sbtn:hover:not(:disabled){background:var(--accentH)}
+#sbtn:disabled{opacity:.35;cursor:not-allowed}
+.infoot{text-align:center;color:var(--text4);font-size:11px;margin-top:8px}
+
+#errbar{background:#2d1515;border-top:1px solid #5c2d2d;color:#e87070;padding:8px 16px;
+  text-align:center;font-size:12px;display:none;flex-shrink:0}
+#errbar.on{display:block}
+
+/* SETTINGS */
+#smod{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;display:none;align-items:flex-start;justify-content:flex-end}
+#smod.open{display:flex}
+#spanel{width:440px;max-width:100vw;height:100vh;background:var(--bg2);
+  border-left:1px solid var(--border);display:flex;flex-direction:column;animation:si .25s ease}
+.sphd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.spt{font-size:16px;font-weight:700}.spb{flex:1;overflow-y:auto;padding:18px 20px}
+.ss{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.pc{background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.pch{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none}
+.pch:hover{background:var(--bg4)}
+.pcb{padding:14px;border-top:1px solid var(--border);display:none}.pcb.on{display:block}
+.svr-box{background:rgba(66,133,244,.08);border:1px solid rgba(66,133,244,.25);border-radius:8px;padding:12px 14px}
+.svr-box-t{font-size:12px;font-weight:600;color:#7abaff;margin-bottom:8px}
+.svr-env{display:inline-block;background:rgba(66,133,244,.18);color:#7abaff;
+  font-size:12px;font-family:monospace;padding:2px 8px;border-radius:4px;margin:3px 0}
+.svr-hint{font-size:11px;color:var(--text3);margin-top:8px;line-height:1.7}
+.fg{margin-bottom:11px}
+.fl{font-size:12px;color:var(--text3);margin-bottom:5px;display:block}
+.fi{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:8px 12px;color:var(--text);font-size:13px;font-family:'Sarabun',sans-serif}
+.fi:focus{outline:none;border-color:var(--accent)}
+.fh{font-size:11px;color:var(--text4);margin-top:3px}
+.bp{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 16px;
+  font-size:13px;cursor:pointer;font-family:'Sarabun',sans-serif;transition:background .2s}
+.bp:hover{background:var(--accentH)}
+.bd{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3);
+  border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:'Sarabun',sans-serif}
+.bd:hover{background:rgba(231,76,60,.22)}
+.div{border:none;border-top:1px solid var(--border);margin:18px 0}
+.guide{font-size:12px;color:var(--text3);line-height:2}
+.guide b{color:var(--text2)}.guide a{color:var(--accent);text-decoration:none}
+.guide a:hover{text-decoration:underline}
+code{background:var(--bg3);padding:1px 6px;border-radius:3px;font-size:11px;color:#7abaff;font-family:monospace}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--green);
+  color:#fff;padding:8px 22px;border-radius:20px;font-size:13px;z-index:999;animation:fu .3s ease;white-space:nowrap}
+.ondot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pl 2.5s infinite;flex-shrink:0}
+
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bn{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+@keyframes si{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+  :root{--sw:min(300px,88vw)}
+  #sidebar{position:fixed;left:0;top:0;bottom:0;z-index:60;width:0}
+  #sidebar:not(.closed){width:var(--sw)}
+  .pname{max-width:80px}.ref-grid{grid-template-columns:1fr}
+  #spanel{width:100vw}
+}
+
+/* ── DISCLAIMER MODAL ── */
+#disc-overlay{
+  position:fixed;inset:0;background:rgba(5,12,22,.92);
+  z-index:500;display:flex;align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(4px);
+  animation:fu .4s ease;
+  overflow:auto;
+}
+#disc-overlay.hidden{display:none}
+#disc-box{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:18px;max-width:520px;width:100%;
+  box-shadow:0 24px 64px rgba(0,0,0,.6);
+  overflow:hidden;
+  max-height:calc(100vh - 40px);
+  display:flex;
+  flex-direction:column;
+}
+.disc-hd{
+  background:linear-gradient(135deg,rgba(192,57,43,.18),rgba(230,126,34,.1));
+  border-bottom:1px solid rgba(231,76,60,.25);
+  padding:22px 26px 18px;text-align:center;
+}
+.disc-icon{font-size:42px;margin-bottom:10px;display:block}
+.disc-title{font-size:19px;font-weight:700;color:#e8dfc0;margin-bottom:4px}
+.disc-eng{font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
+.disc-body{padding:22px 26px;overflow:auto;-webkit-overflow-scrolling:touch}
+.disc-items{display:flex;flex-direction:column;gap:12px;margin-bottom:22px}
+.disc-item{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;padding:13px 15px;
+}
+.disc-item-ico{font-size:18px;flex-shrink:0;margin-top:1px}
+.disc-item-t{font-size:13px;color:var(--text);font-weight:600;margin-bottom:3px}
+.disc-item-s{font-size:12px;color:var(--text3);line-height:1.6}
+.disc-warn{
+  background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.2);
+  border-radius:10px;padding:12px 15px;margin-bottom:20px;
+  font-size:12px;color:#e8a090;line-height:1.7;text-align:center;
+}
+.disc-warn b{color:#e87070}
+.disc-check-row{
+  display:flex;align-items:center;gap:10px;margin-bottom:18px;
+  cursor:pointer;padding:10px 14px;background:var(--bg3);
+  border:1px solid var(--border);border-radius:10px;
+  transition:border-color .2s;
+}
+.disc-check-row:hover{border-color:var(--accent)}
+.disc-check-row input[type=checkbox]{
+  width:18px;height:18px;accent-color:var(--accent);
+  cursor:pointer;flex-shrink:0;
+}
+.disc-check-lbl{font-size:13px;color:var(--text2);cursor:pointer;line-height:1.5;flex:1;min-width:0;overflow-wrap:anywhere;word-break:break-word}
+.disc-btn{
+  width:100%;padding:14px;border:none;border-radius:10px;
+  font-size:15px;font-weight:700;cursor:pointer;
+  font-family:'Sarabun',sans-serif;transition:all .25s;
+  background:var(--bg3);color:var(--text4);
+  pointer-events:none;
+}
+.disc-btn.ready{
+  background:linear-gradient(135deg,var(--accent),#1a5bab);
+  color:#fff;pointer-events:auto;
+  box-shadow:0 4px 18px rgba(30,106,191,.4);
+}
+.disc-btn.ready:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(30,106,191,.5)}
+.disc-ft{text-align:center;font-size:11px;color:var(--text4);margin-top:12px}
+</style>
+</head>
+<body>
+
+<!-- ══ DISCLAIMER MODAL ══ -->
+<div id="disc-overlay">
+  <div id="disc-box">
+    <div class="disc-hd">
+      <span class="disc-icon">⚕️</span>
+      <div class="disc-title">ข้อควรทราบก่อนใช้งาน</div>
+      <div class="disc-eng">AI CLINICAL DECISION SUPPORT — DISCLAIMER</div>
+    </div>
+    <div class="disc-body">
+      <div class="disc-items">
+        <div class="disc-item">
+          <span class="disc-item-ico">🤖</span>
+          <div>
+            <div class="disc-item-t">ระบบนี้ใช้ปัญญาประดิษฐ์ (AI)</div>
+            <div class="disc-item-s">ข้อมูลที่ได้รับเป็นการสนับสนุนการตัดสินใจเบื้องต้น (Clinical Decision Support) เท่านั้น ไม่ใช่การวินิจฉัยหรือสั่งการรักษา</div>
+          </div>
+        </div>
+        <div class="disc-item">
+          <span class="disc-item-ico">👨‍⚕️</span>
+          <div>
+            <div class="disc-item-t">การตัดสินใจทางคลินิกเป็นหน้าที่ของแพทย์</div>
+            <div class="disc-item-s">แพทย์และบุคลากรทางการแพทย์ต้องใช้วิจารณญาณของตนเองในการดูแลผู้ป่วยทุกราย โดยอ้างอิงจากข้อมูลผู้ป่วยจริงและแนวทางวิชาชีพ</div>
+          </div>
+        </div>
+        <div class="disc-item">
+          <span class="disc-item-ico">📋</span>
+          <div>
+            <div class="disc-item-t">อ้างอิงเฉพาะแนวทางของโรงพยาบาลสงฆ์</div>
+            <div class="disc-item-s">ระบบนี้ถูกออกแบบให้ตอบตาม <b style="color:var(--text2)">แนวทางการดูแลผู้ป่วยหลอดเลือดสมองเฉียบพลัน โรงพยาบาลสงฆ์ มีนาคม 2569</b> เท่านั้น ไม่ใช่แนวทางสากลหรือของสถาบันอื่น และอาจไม่ครอบคลุมกรณีพิเศษหรือข้อยกเว้นทางคลินิก</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="disc-warn">
+        <b>⚠️ ข้อจำกัดความรับผิดชอบ</b><br>
+        ระบบ AI นี้อ้างอิงเฉพาะแนวทางภายในของโรงพยาบาลสงฆ์ ไม่มีผลผูกพันทางกฎหมายหรือทางวิชาชีพแต่อย่างใด<br>
+        แพทย์ผู้รักษามีหน้าที่รับผิดชอบในการตัดสินใจทางคลินิกทั้งหมด
+      </div>
+
+      <label class="disc-check-row">
+        <input type="checkbox" id="disc-check" onchange="discToggle()">
+        <span class="disc-check-lbl">ข้าพเจ้าเข้าใจว่าระบบนี้ใช้ AI อ้างอิงแนวทาง รพ.สงฆ์ เท่านั้น และจะใช้วิจารณญาณทางคลินิกของตนเองในการดูแลผู้ป่วยทุกราย</span>
+      </label>
+
+      <button class="disc-btn" id="disc-enter" onclick="discAccept()">เข้าใช้งาน →</button>
+      <div class="disc-ft">Stroke Fast Track AI · โรงพยาบาลสงฆ์ · สำหรับบุคลากรทางการแพทย์เท่านั้น</div>
+    </div>
+  </div>
+</div>
+
+<div id="hdr">
+  <button class="bico" id="sbtoggle">☰</button>
+  <div class="logo">🧠</div>
+  <div class="ttl">
+    <div class="ttl-main">Stroke Fast Track AI</div>
+    <div class="ttl-sub">โรงพยาบาลสงฆ์ · มี.ค. 68</div>
+  </div>
+  <div class="psel" id="psel">
+    <div class="pdot" id="hdot" style="background:#4a7a9b"></div>
+    <span class="pname" id="hpname">เลือก AI</span>
+    <span class="pbadge" id="hbadge"></span>
+    <span style="font-size:10px;color:var(--text3)">▾</span>
+    <div id="pdrop"><div id="pdlist"></div></div>
+  </div>
+  <div class="ondot"></div>
+  <button class="bico" id="themebtn" title="สลับโหมดสี">🌙</button>
+  <button class="bico" id="setbtn">⚙️</button>
+  <button class="bico" id="resetbtn" title="เริ่มใหม่">↺</button>
+</div>
+
+<div id="layout">
+  <div id="sidebar" class="closed">
+    <div id="sb-inner">
+      <div class="sb-hd">🏥 ขั้นตอนการดูแลผู้ป่วย</div>
+      <div id="acc">
+        <div class="sb-loading"><span class="sb-spin">⏳</span> กำลังโหลด...</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="main">
+    <div id="chat">
+      <div id="empty">
+        <div class="e-ico">🧠</div>
+        <div class="e-t">Stroke Fast Track AI</div>
+        <div class="e-s">เลือก AI Provider → พิมพ์คำถาม<br>หรือกด ☰ เพื่อเลือกขั้นตอนสำเร็จรูป</div>
+        <div class="ref-grid">
+          <div class="rc" style="border-left-color:#2ecc71"><div class="rc-l" style="color:#2ecc71">Onset ≤ 4.5 ชม.</div><div class="rc-d">NIHSS&lt;4 → DAPT
+NIHSS≥4 → rt-PA → CTA/Refer</div></div>
+          <div class="rc" style="border-left-color:#e67e22"><div class="rc-l" style="color:#e67e22">Onset 4.5–24 ชม.</div><div class="rc-d">NIHSS&lt;6 → Admit
+NIHSS≥6+ASPECT≥6 → CTA</div></div>
+          <div class="rc" style="border-left-color:#e74c3c"><div class="rc-l" style="color:#e74c3c">ICH (เลือดออก)</div><div class="rc-d">Refer neurosurgery
+SBP 130–140 mmHg</div></div>
+          <div class="rc" style="border-left-color:#9b59b6"><div class="rc-l" style="color:#9b59b6">พบ LVO</div><div class="rc-d">Refer thrombectomy
+สถาบันประสาทวิทยา</div></div>
+        </div>
+        <div id="content-status"></div>
+      </div>
+      <div id="msgs"></div>
+    </div>
+    <div id="errbar"></div>
+    <div id="inbar">
+      <div class="inwrap">
+        <div class="inbox"><textarea id="inta" rows="1" placeholder="ถามเกี่ยวกับแนวทาง Stroke รพ.สงฆ์… (Enter ส่ง · Shift+Enter ขึ้นบรรทัด)"></textarea></div>
+        <button id="sbtn" disabled>➤</button>
+      </div>
+      <div class="infoot">แนวทาง รพ.สงฆ์ มี.ค. 68 · กรณีฉุกเฉินให้ปรึกษาอายุรแพทย์ประสาทวิทยา</div>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="smod">
+  <div id="spanel">
+    <div class="sphd"><span class="spt">⚙️ ตั้งค่า AI Provider</span><button class="bico" id="sclose">✕</button></div>
+    <div class="spb">
+      <div class="ss">🤖 AI Providers</div>
+      <div id="pklist"></div>
+      <div class="div"></div>
+      <div class="ss">➕ เพิ่ม Custom Provider (OpenAI-compatible)</div>
+      <div class="fg"><label class="fl">ชื่อ</label><input class="fi" id="cn" placeholder="Ollama Local / My LLM"></div>
+      <div class="fg"><label class="fl">Endpoint URL</label>
+        <input class="fi" id="ce" placeholder="https://...">
+        <div class="fh">รองรับ OpenAI /v1/chat/completions format</div></div>
+      <div class="fg"><label class="fl">Model</label><input class="fi" id="cm" placeholder="llama3, gpt-4o, mistral"></div>
+      <div class="fg"><label class="fl">API Key (ถ้ามี)</label><input class="fi" id="ck" type="password" placeholder="sk-... หรือเว้นว่าง"></div>
+      <div class="fg"><label class="fl">สี</label><input class="fi" id="cc" value="#7c3aed"></div>
+      <button class="bp" id="addbtn">+ เพิ่ม Provider</button>
+      <div class="div"></div>
+      <div class="ss">🔗 Admin Panel</div>
+      <div style="font-size:12px;color:var(--text3);line-height:1.8">
+        แก้ไข Guideline และ Quick Steps ได้ที่<br>
+        <a href="/admin.html" target="_blank" style="color:var(--accent)">🔐 /admin.html</a>
+        (ต้องใส่ PIN จาก <code>ADMIN_PIN</code> ใน Cloudflare env)
+      </div>
+      <div class="div"></div>
+      <div class="ss">📖 วิธีตั้งค่า Env (Free AI)</div>
+      <div class="guide">
+        <div><b>Cloudflare Pages → Settings → Environment variables</b></div>
+        <div style="margin-top:8px">🟢 <b>Free:</b></div>
+        <div>• <code>GROQ_API_KEY</code> → <a href="https://console.groq.com" target="_blank">console.groq.com</a></div>
+        <div>• <code>GEMINI_API_KEY</code> → <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a></div>
+        <div>• <code>OPENROUTER_API_KEY</code> → <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a></div>
+        <div style="margin-top:6px">💳 <b>Paid (ใส่ Key ในแอป):</b></div>
+        <div>• Claude → <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div>
+        <div>• OpenAI → <a href="https://platform.openai.com" target="_blank">platform.openai.com</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════ */
+let msgs=[], loading=false, actP=null, providers=[], openAcc=null, openSP=null;
+let THEME='dark';
+
+// Dynamic content จาก KV (โหลดตอน init)
+let GUIDELINES = '';   // สำหรับ paid AI (browser direct call)
+let STEPS = [];        // สำหรับ sidebar
+
+/* ─ Presets ─────────────────────────────────── */
+const PRESETS=[
+  {id:'groq',    name:'Groq · LLaMA 3.3 70B',     badge:'FREE',color:'#f97316',type:'proxy',
+   envVar:'GROQ_API_KEY',   note:'LLaMA 3.3 70B · Server Key (Env)'},
+  {id:'gemini',  name:'Google Gemini 2.0 Flash',   badge:'FREE',color:'#4285f4',type:'proxy',
+   envVar:'GEMINI_API_KEY', note:'Gemini 2.0 Flash · Server Key (Env)'},
+  {id:'openrouter',name:'OpenRouter · Llama Free', badge:'FREE',color:'#7c3aed',type:'proxy',
+   envVar:'OPENROUTER_API_KEY', note:'Llama 3.1 8B Free · Server Key (Env)'},
+  {id:'claude',  name:'Claude · Haiku',            badge:'PAID',color:'#c0392b',type:'claude',
+   endpoint:'https://api.anthropic.com/v1/messages',model:'claude-haiku-4-5-20251001',
+   note:'ใส่ API Key ของคุณ',needKey:true},
+  {id:'openai',  name:'OpenAI · GPT-4o mini',      badge:'PAID',color:'#10a37f',type:'openai',
+   endpoint:'https://api.openai.com/v1/chat/completions',model:'gpt-4o-mini',
+   note:'ใส่ API Key ของคุณ',needKey:true},
+];
+
+/* ═══════════════════════════════════════════════
+   INIT — โหลด content จาก /api/public
+═══════════════════════════════════════════════ */
+async function initContent(){
+  // แสดง loading ใน sidebar
+  setAccLoading(true);
+  const cs=document.getElementById('content-status');
+  cs.className='content-status loading';
+  cs.textContent='⏳ กำลังโหลด guideline...';
+
+  try{
+    const r=await fetch('/api/public?r=all',{cache:'no-store'});
+    const d=await r.json();
+
+    // อัปเดต STEPS (sidebar)
+    if(Array.isArray(d.steps)&&d.steps.length>0){
+      STEPS=d.steps;
+    }
+
+    // อัปเดต GUIDELINES (สำหรับ paid AI)
+    if(d.guidelines&&d.guidelines.length>50){
+      GUIDELINES=d.guidelines;
+    }
+
+    renderAcc();
+    cs.className='content-status updated';
+    cs.textContent='✅ โหลด guideline ล่าสุดแล้ว';
+    setTimeout(()=>{cs.className='content-status';cs.textContent='';},3000);
+
+  }catch(e){
+    // Fallback: ใช้ default steps ที่ฝังในโค้ด
+    STEPS=DEFAULT_STEPS;
+    GUIDELINES=DEFAULT_GUIDELINES_BRIEF;
+    renderAcc();
+    cs.className='content-status';cs.textContent='';
+  }
+}
+
+/* Default fallback (ถ้า /api/public ใช้ไม่ได้ เช่น localhost dev) */
+const DEFAULT_STEPS=[
+  {id:'s1',ico:'🚨',ttl:'ผู้ป่วยมาถึง',step:'Step 1',qs:[
+    'ผู้ป่วยมีอาการปากเบี้ยว แขนอ่อนแรง พูดไม่ชัด ต้องทำอะไรก่อนทันที?',
+    'จะประเมิน BEFAST ในห้องฉุกเฉินอย่างไร?',
+    'อาการแบบไหนบ่งชี้ว่าเป็น LVO ต้องประเมิน VAN อย่างไร?',
+    'Stroke fast track คืออะไร ควร activate เมื่อไหร่?',
+    'ต้องวัด V/S และประเมิน Neuro signs อะไรบ้าง?',
+  ]},
+  {id:'s2',ico:'🔬',ttl:'ส่งตรวจ Lab & EKG',step:'Step 2',qs:[
+    'Emergency lab ที่ต้องสั่งทันทีมีอะไรบ้าง?',
+    'Other lab (ไม่ด่วน) ที่ควรส่งมีอะไร?',
+    'ทำไมต้องเช็ค DTX ก่อน? ระดับน้ำตาลมีผลต่อการรักษาอย่างไร?',
+    'Coagulogram สำคัญอย่างไรในการตัดสินใจให้ rt-PA?',
+    'EKG ช่วยอะไรในผู้ป่วย Stroke?',
+  ]},
+  {id:'s3',ico:'📊',ttl:'ประเมิน NIHSS',step:'Step 3',qs:[
+    'NIHSS ประเมินอะไรบ้าง? มีกี่หัวข้อ คะแนนเต็มเท่าไหร่?',
+    'NIHSS < 4 หมายความว่าอะไร ต้องรักษาอย่างไร?',
+    'NIHSS ≥ 4 onset 3 ชั่วโมง ขั้นตอนต่อไปคืออะไร?',
+    'NIHSS ≥ 6 บ่งชี้อะไร ต้องทำอะไรต่อ?',
+    'NIHSS เปลี่ยนแปลงหลัง rt-PA ต้องติดตามอย่างไร?',
+  ]},
+  {id:'s4',ico:'🖥️',ttl:'ผล CT Brain',step:'Step 4',qs:[
+    'CT พบ intracranial hemorrhage ต้องดูแลอย่างไรทันที?',
+    'CT ไม่พบเลือดออก onset 2 ชั่วโมง NIHSS 5 ขั้นตอนต่อไปคืออะไร?',
+    'ASPECT score คืออะไร? score ≥ 6 หมายความว่าอะไร?',
+    'เมื่อไหร่ต้องทำ CTA เพิ่มเติม? CTA ดูอะไร?',
+    'CT brain กับ CTA แตกต่างกันอย่างไร?',
+  ]},
+  {id:'s5',ico:'💊',ttl:'การรักษา',step:'Step 5',qs:[
+    'rt-PA คืออะไร? ให้ในกรณีใด? ขนาดยาคำนวณอย่างไร?',
+    'ข้อห้ามใช้ rt-PA (contraindication) มีอะไรบ้าง?',
+    'DAPT คืออะไร ประกอบด้วยยาอะไร? ให้เมื่อไหร่?',
+    'Thrombectomy คืออะไร? เมื่อไหร่ต้อง refer?',
+    'ผู้ป่วย onset 8 ชม. NIHSS 8 ASPECT 7 ไม่มีเลือดออก รักษาอย่างไร?',
+    'ผู้ป่วย onset 2 ชม. NIHSS 10 หลัง rt-PA NIHSS ยัง 8 ต้องทำอะไร?',
+    'ควบคุม BP อย่างไรใน Ischemic stroke และ Hemorrhagic stroke?',
+  ]},
+  {id:'s6',ico:'🏥',ttl:'Admit & Refer',step:'Step 6',qs:[
+    'Stroke care map มีอะไรบ้าง ดูแลอะไรหลัง admit?',
+    'เมื่อไหร่ต้อง refer สถาบันประสาทวิทยา?',
+    'ผู้ป่วย onset > 24 ชั่วโมง ต้องทำอย่างไร?',
+    'ผู้ป่วย Hemorrhagic stroke ต้อง refer neurosurgery ทุกรายหรือไม่?',
+    'กรณีมีปัญหาควรปรึกษาใคร?',
+  ]},
+];
+
+// Fallback system prompt (สั้น — ใช้เมื่อ /api/public ใช้ไม่ได้)
+const DEFAULT_GUIDELINES_BRIEF=`แนวทาง Stroke รพ.สงฆ์ มี.ค.68:
+BEFAST: B=เวียนหัวเดินเซ E=ตาพร่า F=ปากเบี้ยว A=แขนขาอ่อนแรง S=พูดไม่ชัด T=เวลาตั้งแต่เริ่มอาการ
+VAN(LVO): V=ตามัวเฉียบพลัน A=Aphasia N=Neglect
+ขั้นตอน: activate fast track→V/S,N/S→lab(DTX,CBC,elyte,coag,EKG)→NIHSS→CT+CXR
+CT hemorrhage: Refer neurosurgery+SBP130-140
+Onset≤4.5ชม: NIHSS<4→DAPT; NIHSS≥4→rt-PA(0.9mg/kg IV max90mg)→NIHSS<6→admit; NIHSS≥6→CTA→LVO→Refer thrombectomy
+Onset4.5-24ชม: NIHSS<6→admit; NIHSS≥6+ASPECT≥6→CTA→LVO→Refer thrombectomy
+>24ชม: admit. ปรึกษาอายุรแพทย์ประสาทวิทยาหากมีปัญหา`;
+
+/* ═══════════════════════════════════════════════
+   STORAGE
+═══════════════════════════════════════════════ */
+function load(){
+  const keys=JSON.parse(localStorage.getItem('s_keys')||'{}');
+  const customs=JSON.parse(localStorage.getItem('s_customs')||'[]');
+  const last=localStorage.getItem('s_prov');
+  THEME=localStorage.getItem('s_theme')||'dark';
+  providers=[...PRESETS.map(p=>({...p,apiKey:keys[p.id]||''})),
+             ...customs.map(c=>({...c,apiKey:keys[c.id]||''}))];
+  if(last)actP=providers.find(p=>p.id===last)||null;
+}
+
+function applyTheme(){
+  const t=(THEME==='light')?'light':'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  const b=document.getElementById('themebtn');
+  if(b) b.textContent = (t==='light') ? '☀️' : '🌙';
+}
+
+function toggleTheme(){
+  THEME=(THEME==='light')?'dark':'light';
+  localStorage.setItem('s_theme', THEME);
+  applyTheme();
+}
+function saveKeys(){
+  const k={};providers.forEach(p=>{if(p.apiKey)k[p.id]=p.apiKey;});
+  localStorage.setItem('s_keys',JSON.stringify(k));
+}
+function saveCustoms(){
+  const c=providers.filter(p=>!PRESETS.find(pp=>pp.id===p.id));
+  localStorage.setItem('s_customs',JSON.stringify(c.map(({apiKey,...r})=>r)));
+  saveKeys();
+}
+
+/* ═══════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════ */
+function renderHdr(){
+  const p=actP;
+  document.getElementById('hdot').style.background=p?p.color:'#4a7a9b';
+  document.getElementById('hpname').textContent=p?p.name:'เลือก AI';
+  const b=document.getElementById('hbadge');
+  if(p){b.textContent=p.badge;b.className='pbadge '+(p.badge==='FREE'?'free':p.badge==='PAID'?'paid':'custom');}
+  else b.textContent='';
+  document.getElementById('sbtn').disabled=!p||loading;
+}
+
+function renderDrop(){
+  const l=document.getElementById('pdlist');l.innerHTML='';
+  providers.forEach(p=>{
+    const ks=p.type==='proxy'
+      ?`<span class="ksvr">🔒 Server Env</span>`
+      :(p.apiKey?`<span class="kok">🔑 พร้อม</span>`:`<span class="kno">❌ ต้องการ Key</span>`);
+    const d=document.createElement('div');
+    d.className='pdi'+(actP&&actP.id===p.id?' act':'');
+    d.innerHTML=`<div class="pdot" style="background:${p.color}"></div>
+      <div class="pdi-info"><div class="pdi-n">${esc(p.name)}</div><div class="pdi-s">${esc(p.note||'')}</div></div>
+      <div class="pdi-right">
+        <span class="pbadge ${p.badge==='FREE'?'free':p.badge==='PAID'?'paid':'custom'}">${p.badge}</span>${ks}</div>`;
+    d.onclick=()=>selProv(p.id);l.appendChild(d);
+  });
+}
+
+function setAccLoading(on){
+  if(on) document.getElementById('acc').innerHTML='<div class="sb-loading"><span class="sb-spin">⏳</span> กำลังโหลด...</div>';
+}
+
+function renderAcc(){
+  const el=document.getElementById('acc');el.innerHTML='';
+  const list=STEPS.length>0?STEPS:DEFAULT_STEPS;
+  list.forEach(s=>{
+    const d=document.createElement('div');
+    d.innerHTML=`<div class="ah${openAcc===s.id?' on':''}">
+        <span class="ah-ico">${s.ico||'📋'}</span><span class="ah-lbl">${esc(s.ttl)}</span>
+        <span class="ah-step">${esc(s.step)}</span><span class="ah-arr">▶</span></div>
+      <div class="ab${openAcc===s.id?' on':''}">
+        ${(s.qs||[]).map(q=>`<button class="aq" data-q="${q.replace(/"/g,'&quot;')}">${esc(q)}</button>`).join('')}
+      </div>`;
+    d.querySelector('.ah').onclick=()=>{openAcc=openAcc===s.id?null:s.id;renderAcc();};
+    d.querySelectorAll('.aq').forEach(b=>b.onclick=()=>askQ(b.getAttribute('data-q')));
+    el.appendChild(d);
+  });
+}
+
+function renderPKList(){
+  const l=document.getElementById('pklist');l.innerHTML='';
+  providers.forEach(p=>{
+    const isProxy=p.type==='proxy';
+    const isCustom=!PRESETS.find(pp=>pp.id===p.id);
+    const c=document.createElement('div');c.className='pc';
+    const body=isProxy
+      ?`<div class="svr-box">
+          <div class="svr-box-t">🔒 ใช้ API Key จาก Cloudflare Environment Variables</div>
+          <div>ชื่อตัวแปร: <span class="svr-env">${p.envVar}</span></div>
+          <div class="svr-hint">
+            Settings → Environment variables → เพิ่ม <b>${p.envVar}</b><br>
+            แล้ว Redeploy เพื่อให้มีผล
+          </div></div>`
+      :`<div class="fg"><label class="fl">API Key</label>
+          <input class="fi" type="password" id="ki-${p.id}" placeholder="วาง API key ที่นี่..." value="${esc(p.apiKey||'')}"></div>
+        <div class="fg"><label class="fl">Model</label>
+          <input class="fi" id="mi-${p.id}" value="${esc(p.model||'')}"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="bp" onclick="savePK('${p.id}')">💾 บันทึก</button>
+          ${isCustom?`<button class="bd" onclick="rmCustom('${p.id}')">🗑 ลบ</button>`:''}
+        </div>`;
+    c.innerHTML=`<div class="pch">
+        <div class="pdot" style="background:${p.color}"></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;color:var(--text)">${esc(p.name)}</div>
+          <div style="font-size:11px;color:var(--text3)">${esc(p.note||'')}</div>
+        </div>
+        <span class="pbadge ${p.badge==='FREE'?'free':p.badge==='PAID'?'paid':'custom'}" style="margin-right:4px">${p.badge}</span>
+        <span style="font-size:10px;color:var(--text3)">▾</span></div>
+      <div class="pcb${openSP===p.id?' on':''}">${body}</div>`;
+    c.querySelector('.pch').onclick=()=>{openSP=openSP===p.id?null:p.id;renderPKList();};
+    l.appendChild(c);
+  });
+}
+
+function renderMsgs(){
+  const empty=document.getElementById('empty');
+  const ml=document.getElementById('msgs');
+  if(msgs.length===0){empty.style.display='flex';ml.style.display='none';return;}
+  empty.style.display='none';ml.style.display='flex';ml.innerHTML='';
+  msgs.forEach(m=>{
+    const d=document.createElement('div');d.className='msg '+m.role;
+    d.innerHTML=`<div class="mav ${m.role==='assistant'?'ai':'user'}">${m.role==='assistant'?'🧠':'👤'}</div>
+      <div class="mb">${esc(m.content)}</div>`;
+    ml.appendChild(d);
+  });
+  if(loading){
+    const d=document.createElement('div');d.className='msg ai';
+    d.innerHTML=`<div class="mav ai">🧠</div>
+      <div class="mb" style="padding:14px 18px"><span class="td"></span><span class="td"></span><span class="td"></span></div>`;
+    ml.appendChild(d);
+  }
+  setTimeout(()=>document.getElementById('chat').scrollTop=9999,30);
+}
+
+function render(){renderHdr();renderDrop();renderMsgs();}
+
+/* ═══════════════════════════════════════════════
+   ACTIONS
+═══════════════════════════════════════════════ */
+function selProv(id){
+  actP=providers.find(p=>p.id===id);
+  localStorage.setItem('s_prov',id);
+  document.getElementById('pdrop').classList.remove('open');
+  renderHdr();renderDrop();
+}
+
+function askQ(q){
+  document.getElementById('inta').value=q;autoSz();
+  if(window.innerWidth<768)document.getElementById('sidebar').classList.add('closed');
+  send();
+}
+
+function savePK(id){
+  const p=providers.find(pp=>pp.id===id);if(!p)return;
+  const ki=document.getElementById(`ki-${id}`),mi=document.getElementById(`mi-${id}`);
+  if(ki)p.apiKey=ki.value.trim();if(mi)p.model=mi.value.trim();
+  saveKeys();saveCustoms();
+  if(actP&&actP.id===id)actP=p;
+  toast('บันทึกแล้ว ✓');renderDrop();renderHdr();
+}
+
+function rmCustom(id){
+  if(!confirm('ลบ provider นี้?'))return;
+  providers=providers.filter(p=>p.id!==id);
+  if(actP&&actP.id===id){actP=null;localStorage.removeItem('s_prov');}
+  saveCustoms();renderPKList();renderDrop();renderHdr();
+}
+
+function addCustom(){
+  const name=document.getElementById('cn').value.trim();
+  const ep=document.getElementById('ce').value.trim();
+  const model=document.getElementById('cm').value.trim();
+  const key=document.getElementById('ck').value.trim();
+  const color=document.getElementById('cc').value.trim()||'#7c3aed';
+  if(!name||!ep||!model){alert('กรุณากรอก ชื่อ, Endpoint และ Model');return;}
+  const id='c-'+Date.now();
+  providers.push({id,name,badge:'CUSTOM',color,type:'openai',endpoint:ep,model,note:'Custom provider',apiKey:key,needKey:false});
+  saveCustoms();
+  ['cn','ce','cm','ck'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('cc').value='#7c3aed';
+  renderPKList();renderDrop();toast('เพิ่ม Provider แล้ว ✓');
+}
+
+/* ═══════════════════════════════════════════════
+   API CALLS
+═══════════════════════════════════════════════ */
+// Free AI → /api/chat (server reads from KV)
+async function callProxy(provId,messages){
+  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({provider:provId,messages})});
+  const d=await r.json();
+  if(!r.ok||d.error)throw new Error(d.error||'Server error');
+  return d.reply;
+}
+
+// Paid AI → browser direct (ใช้ GUIDELINES ที่โหลดมาจาก KV)
+function buildSYS(){
+  const g=GUIDELINES||DEFAULT_GUIDELINES_BRIEF;
+  return `คุณคือผู้ช่วยแพทย์ผู้เชี่ยวชาญด้านแนวทางการดูแลผู้ป่วยโรคหลอดเลือดสมองเฉียบพลัน ของโรงพยาบาลสงฆ์\nตอบเป็นภาษาไทย ชัดเจน กระชับ เป็นขั้นตอน\nหากคำถามอยู่นอกเหนือแนวทาง ให้แนะนำปรึกษาอายุรแพทย์ประสาทวิทยา\n\n════ แนวทางการรักษา ════\n\n${g}\n\n═══════════════════════`;
+}
+
+async function callOAI(p,messages){
+  const r=await fetch(p.endpoint,{method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${p.apiKey}`},
+    body:JSON.stringify({model:p.model,max_tokens:1000,messages:[{role:'system',content:buildSYS()},...messages]})});
+  if(!r.ok)throw new Error(await r.text());
+  return (await r.json()).choices?.[0]?.message?.content||'ไม่ได้รับคำตอบ';
+}
+
+async function callClaude(p,messages){
+  const r=await fetch(p.endpoint,{method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':p.apiKey,
+      'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:p.model,max_tokens:1000,system:buildSYS(),messages})});
+  if(!r.ok)throw new Error(await r.text());
+  return (await r.json()).content?.[0]?.text||'ไม่ได้รับคำตอบ';
+}
+
+/* ═══════════════════════════════════════════════
+   SEND
+═══════════════════════════════════════════════ */
+async function send(){
+  const ta=document.getElementById('inta');
+  const txt=ta.value.trim();
+  if(!txt||loading||!actP)return;
+  if(actP.needKey&&!actP.apiKey){
+    showErr('กรุณากรอก API Key ก่อน → กดปุ่ม ⚙️ ตั้งค่า');
+    document.getElementById('smod').classList.add('open');renderPKList();return;
+  }
+  ta.value='';autoSz();hideErr();
+  msgs.push({role:'user',content:txt});
+  loading=true;renderHdr();renderMsgs();
+  try{
+    let rep;
+    if(actP.type==='proxy')       rep=await callProxy(actP.id,msgs);
+    else if(actP.type==='claude') rep=await callClaude(actP,msgs);
+    else                          rep=await callOAI(actP,msgs);
+    msgs.push({role:'assistant',content:rep});
+  }catch(e){
+    msgs.pop();
+    showErr('ข้อผิดพลาด: '+(e.message||'unknown')+'  ·  ตรวจสอบ Key/Env แล้วลองใหม่');
+  }finally{loading=false;renderHdr();renderMsgs();}
+}
+
+/* ═══════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════ */
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function showErr(m){const b=document.getElementById('errbar');b.textContent=m;b.classList.add('on');}
+function hideErr(){document.getElementById('errbar').classList.remove('on');}
+function autoSz(){const t=document.getElementById('inta');t.style.height='auto';t.style.height=Math.min(t.scrollHeight,120)+'px';}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}
+
+/* ═══════════════════════════════════════════════
+   EVENTS
+═══════════════════════════════════════════════ */
+document.getElementById('sbtoggle').onclick=()=>document.getElementById('sidebar').classList.toggle('closed');
+document.getElementById('psel').onclick=e=>{e.stopPropagation();document.getElementById('pdrop').classList.toggle('open');};
+document.getElementById('pdrop').onclick=e=>e.stopPropagation();
+document.addEventListener('click',()=>document.getElementById('pdrop').classList.remove('open'));
+document.getElementById('setbtn').onclick=()=>{renderPKList();document.getElementById('smod').classList.add('open');};
+document.getElementById('themebtn').onclick=toggleTheme;
+document.getElementById('sclose').onclick=()=>document.getElementById('smod').classList.remove('open');
+document.getElementById('smod').onclick=e=>{if(e.target===document.getElementById('smod'))document.getElementById('smod').classList.remove('open');};
+document.getElementById('resetbtn').onclick=()=>{if(msgs.length&&!confirm('เริ่มบทสนทนาใหม่?'))return;msgs=[];renderMsgs();};
+document.getElementById('addbtn').onclick=addCustom;
+document.getElementById('sbtn').onclick=send;
+const ta=document.getElementById('inta');
+ta.oninput=autoSz;
+ta.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}};
+
+/* ═══════════════════════════════════════════════
+   DISCLAIMER
+═══════════════════════════════════════════════ */
+function discToggle(){
+  const ok=document.getElementById('disc-check').checked;
+  const btn=document.getElementById('disc-enter');
+  btn.className='disc-btn'+(ok?' ready':'');
+}
+function discAccept(){
+  if(!document.getElementById('disc-check').checked)return;
+  document.getElementById('disc-overlay').classList.add('hidden');
+  sessionStorage.setItem('disc_ok','1');
+}
+// ถ้า session นี้ยอมรับแล้ว ข้ามได้เลย
+if(sessionStorage.getItem('disc_ok')==='1'){
+  document.getElementById('disc-overlay').classList.add('hidden');
+}
+
+/* ═══════════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════════ */
+load();
+applyTheme();
+render();
+if(window.innerWidth>=768)document.getElementById('sidebar').classList.remove('closed');
+
+// โหลด content จาก KV หลัง UI พร้อม
+initContent();
+</script>
+</body>
+</html>
