@@ -193,6 +193,45 @@ code{background:var(--bg3);padding:1px 6px;border-radius:3px;font-size:11px;colo
   #spanel{width:100vw}
 }
 
+@media(max-width:480px){
+  :root{--hh:52px}
+  #hdr{padding:0 10px;gap:8px}
+  .logo{width:34px;height:34px;border-radius:10px;font-size:17px}
+  .ttl-main{font-size:14px}
+  .ttl-sub{font-size:10px}
+  .bico{width:32px;height:32px;border-radius:8px;font-size:14px}
+  .psel{padding:5px 8px;max-width:56vw}
+  .pname{max-width:92px}
+  #pdrop{min-width:min(92vw,320px)}
+
+  #chat{padding:14px 10px}
+  #empty{gap:14px;padding:18px}
+  .e-ico{font-size:40px}
+  .e-t{font-size:16px}
+  .e-s{font-size:12px;max-width:340px}
+  .ref-grid{gap:8px;max-width:420px}
+  .rc{padding:10px 12px}
+  .rc-l{font-size:10.5px}
+  .rc-d{font-size:10.5px}
+
+  #msgs{gap:12px}
+  .mav{width:30px;height:30px;border-radius:9px;font-size:13px}
+  .mb{max-width:88%;padding:10px 13px;font-size:13px;line-height:1.7}
+
+  #inbar{padding:10px 10px calc(10px + env(safe-area-inset-bottom, 0px))}
+  .inwrap{gap:8px}
+  .inbox{padding:9px 12px;border-radius:12px}
+  #inta{font-size:13px;max-height:110px}
+  #sbtn{width:40px;height:40px;border-radius:10px;font-size:18px}
+  .infoot{font-size:10px;line-height:1.5}
+
+  .disc-hd{padding:18px 18px 14px}
+  .disc-body{padding:16px 18px}
+  .disc-title{font-size:17px}
+  .disc-item{padding:12px 13px}
+  .disc-check-row{padding:10px 12px}
+}
+
 /* ── DISCLAIMER MODAL ── */
 #disc-overlay{
   position:fixed;inset:0;background:rgba(5,12,22,.92);
