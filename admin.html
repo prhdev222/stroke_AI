@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · Stroke Fast Track AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg:#0b1929;--bg2:#0d2038;--bg3:#102845;--bg4:#142f52;
+      --border:#1a3a5c;--border2:#1f4570;
+      --text:#c8dff0;--text2:#7aafcf;--text3:#4a7a9b;--text4:#2a5075;
+      --accent:#1e6abf;--accentH:#2577d4;
+      --green:#2ecc71;--red:#e74c3c;--purple:#9b59b6;
+    }
+    [data-theme="light"]{
+      --bg:#f4f8ff;--bg2:#ffffff;--bg3:#f0f5ff;--bg4:#e7f0ff;
+      --border:#d5e2f5;--border2:#c7d7ef;
+      --text:#0f2a44;--text2:#1f3e5c;--text3:#4f6c88;--text4:#6b87a1;
+      --accent:#1e6abf;--accentH:#2577d4;
+      --green:#1f9d5b;--red:#c0392b;--purple:#6f42c1;
+    }
+    html,body{height:100%}
+    body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text)}
+    a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+    .wrap{max-width:980px;margin:0 auto;padding:18px 16px 40px}
+    .top{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#1e5799,#c0392b);display:flex;align-items:center;justify-content:center}
+    .t1{font-weight:800}
+    .t2{font-size:12px;color:var(--text3)}
+    .btn{border:1px solid var(--border);background:var(--bg3);color:var(--text2);padding:8px 12px;border-radius:10px;cursor:pointer;font-family:inherit}
+    .btn:hover{background:var(--bg4);color:var(--text)}
+    .btn.pri{border:none;background:var(--accent);color:#fff}
+    .btn.pri:hover{background:var(--accentH)}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+    .ch{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .ct{font-weight:800}
+    .cs{font-size:12px;color:var(--text3)}
+    .cb{padding:14px 16px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+    .fg{flex:1;min-width:220px}
+    .lbl{display:block;font-size:12px;color:var(--text3);margin-bottom:5px}
+    .in{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:10px;font-family:inherit}
+    .in:focus{outline:none;border-color:var(--accent)}
+    textarea.in{min-height:140px;resize:vertical;line-height:1.6}
+    .hint{font-size:12px;color:var(--text4);margin-top:8px;line-height:1.7}
+    .bar{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .ok{color:var(--green);font-size:12px}
+    .err{color:#ff8f8f;font-size:12px}
+    code{background:var(--bg3);padding:1px 6px;border-radius:3px;font-size:11px;color:#7abaff;font-family:monospace}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo">🧠</div>
+        <div>
+          <div class="t1">Admin · Stroke Fast Track AI</div>
+          <div class="t2">แก้ไข <b>guidelines</b> และ <b>quick steps</b> ใน KV</div>
+        </div>
+      </div>
+      <div class="row" style="justify-content:flex-end">
+        <button class="btn" id="themebtn" title="สลับโหมดสี">🌙</button>
+        <a class="btn" href="/index.html">กลับหน้าใช้งาน</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="ch">
+          <div>
+            <div class="ct">🔐 PIN</div>
+            <div class="cs">ต้องตรงกับ <code>ADMIN_PIN</code> ใน Cloudflare env</div>
+          </div>
+        </div>
+        <div class="cb">
+          <div class="row">
+            <div class="fg">
+              <label class="lbl">Admin PIN</label>
+              <input class="in" id="pin" type="password" placeholder="ใส่ PIN..." />
+            </div>
+            <button class="btn" id="loadbtn">โหลดจาก /api/public</button>
+            <button class="btn pri" id="savebtn">บันทึกลง KV</button>
+          </div>
+          <div class="bar">
+            <span id="status" class="cs"></span>
+          </div>
+          <div class="hint">
+            - ค่าใน KV ใช้ key: <code>guidelines</code> และ <code>quick_steps</code><br>
+            - ถ้า JSON ของ steps ไม่ถูกต้อง จะไม่บันทึก
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch">
+          <div>
+            <div class="ct">📌 Guidelines</div>
+            <div class="cs">ข้อความแนวทาง (string)</div>
+          </div>
+        </div>
+        <div class="cb">
+          <textarea class="in" id="guidelines" placeholder="วาง guideline ที่นี่..."></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch">
+          <div>
+            <div class="ct">🏥 Quick Steps</div>
+            <div class="cs">แก้แบบข้อความปกติ (อ่านง่าย) — ระบบจะแปลงให้อัตโนมัติ</div>
+          </div>
+          <div class="row" style="justify-content:flex-end">
+            <button class="btn" id="examplebtn">ตัวอย่าง</button>
+            <button class="btn" id="fmtbtn">จัดรูปแบบ</button>
+          </div>
+        </div>
+        <div class="cb">
+          <textarea class="in" id="steps" placeholder="รูปแบบ:
+## s1 | 🚨 | ผู้ป่วยมาถึง | Step 1
+- คำถาม 1
+- คำถาม 2
+
+## s2 | 🔬 | ส่งตรวจ Lab & EKG | Step 2
+- ..."></textarea>
+          <div class="hint">
+            ใช้หัวข้อขึ้นต้นด้วย <code>##</code> แล้วตามด้วย <code>id | ico | ttl | step</code><br>
+            คำถามใช้บรรทัดขึ้นต้นด้วย <code>-</code><br>
+            ระบบจะบันทึกลง KV เป็น JSON ตามเดิม (key: <code>quick_steps</code>)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let THEME = localStorage.getItem('s_theme') || 'dark';
+    function applyTheme(){
+      const t = (THEME === 'light') ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+      document.getElementById('themebtn').textContent = (t === 'light') ? '☀️' : '🌙';
+    }
+    function toggleTheme(){
+      THEME = (THEME === 'light') ? 'dark' : 'light';
+      localStorage.setItem('s_theme', THEME);
+      applyTheme();
+    }
+    applyTheme();
+    document.getElementById('themebtn').onclick = toggleTheme;
+
+    const $ = (id) => document.getElementById(id);
+    const statusEl = $('status');
+    function setStatus(msg, kind){
+      statusEl.className = kind === 'ok' ? 'ok' : kind === 'err' ? 'err' : 'cs';
+      statusEl.textContent = msg || '';
+    }
+
+    async function loadPublic(){
+      setStatus('⏳ กำลังโหลด...', '');
+      const r = await fetch('/api/public?r=all', { cache: 'no-store' });
+      const d = await r.json();
+      if (!r.ok || d?.ok === false) throw new Error(d?.error || 'โหลดไม่สำเร็จ');
+      $('guidelines').value = d.guidelines || '';
+      $('steps').value = stepsToText(d.steps || []);
+      setStatus('✅ โหลดแล้ว', 'ok');
+    }
+
+    function stepsToText(steps){
+      const arr = Array.isArray(steps) ? steps : [];
+      return arr.map(s => {
+        const id = (s && s.id) ? String(s.id) : '';
+        const ico = (s && s.ico) ? String(s.ico) : '📋';
+        const ttl = (s && s.ttl) ? String(s.ttl) : '';
+        const step = (s && s.step) ? String(s.step) : '';
+        const qs = Array.isArray(s && s.qs) ? s.qs : [];
+        const head = `## ${id} | ${ico} | ${ttl} | ${step}`.trim();
+        const lines = qs.map(q => `- ${String(q)}`);
+        return [head, ...lines].join('\n');
+      }).join('\n\n').trim() + '\n';
+    }
+
+    function textToSteps(text){
+      const lines = String(text || '').replace(/\r\n/g, '\n').split('\n');
+      const steps = [];
+      let cur = null;
+
+      function pushCur(){
+        if (!cur) return;
+        if (!cur.id || !cur.ttl) return;
+        cur.qs = Array.isArray(cur.qs) ? cur.qs.filter(Boolean) : [];
+        steps.push(cur);
+      }
+
+      for (const rawLine of lines){
+        const line = rawLine.trim();
+        if (!line) continue;
+
+        if (line.startsWith('##')){
+          pushCur();
+          const meta = line.replace(/^##\s*/, '');
+          const parts = meta.split('|').map(p => p.trim());
+          const id = parts[0] || '';
+          const ico = parts[1] || '📋';
+          const ttl = parts[2] || '';
+          const step = parts[3] || '';
+          cur = { id, ico, ttl, step, qs: [] };
+          continue;
+        }
+
+        if (!cur) continue;
+
+        if (line.startsWith('-')){
+          const q = line.replace(/^-+\s*/, '').trim();
+          if (q) cur.qs.push(q);
+          continue;
+        }
+      }
+      pushCur();
+
+      if (!steps.length) throw new Error('ไม่พบข้อมูล steps (ต้องมีหัวข้อขึ้นต้นด้วย ##)');
+      return steps;
+    }
+
+    async function saveKV(){
+      const pin = $('pin').value.trim();
+      if (!pin) { setStatus('กรุณาใส่ PIN', 'err'); return; }
+
+      let steps;
+      try { steps = textToSteps($('steps').value); } catch (e) { setStatus('Quick Steps ไม่ถูกต้อง: ' + e.message, 'err'); return; }
+
+      const guidelines = $('guidelines').value;
+      setStatus('⏳ กำลังบันทึก...', '');
+
+      const r = await fetch('/api/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin, guidelines, steps })
+      });
+      const t = await r.text();
+      let d = null;
+      try { d = JSON.parse(t); } catch {}
+      if (!r.ok || d?.ok === false) throw new Error(d?.error || t || 'บันทึกไม่สำเร็จ');
+      setStatus('✅ บันทึกลง KV แล้ว', 'ok');
+    }
+
+    $('loadbtn').onclick = () => loadPublic().catch(e => setStatus('โหลดผิดพลาด: ' + e.message, 'err'));
+    $('savebtn').onclick = () => saveKV().catch(e => setStatus('บันทึกผิดพลาด: ' + e.message, 'err'));
+    $('fmtbtn').onclick = () => {
+      try { $('steps').value = stepsToText(textToSteps($('steps').value)); setStatus('จัดรูปแบบแล้ว', 'ok'); }
+      catch(e){ setStatus('Quick Steps ไม่ถูกต้อง: ' + e.message, 'err'); }
+    };
+    $('examplebtn').onclick = () => {
+      $('steps').value = [
+        '## s1 | 🚨 | ผู้ป่วยมาถึง | Step 1',
+        '- ผู้ป่วยมีอาการปากเบี้ยว แขนอ่อนแรง พูดไม่ชัด ต้องทำอะไรก่อนทันที?',
+        '- จะประเมิน BEFAST ในห้องฉุกเฉินอย่างไร?',
+        '',
+        '## s2 | 🔬 | ส่งตรวจ Lab & EKG | Step 2',
+        '- Emergency lab ที่ต้องสั่งทันทีมีอะไรบ้าง?',
+        '- ทำไมต้องเช็ค DTX ก่อน? ระดับน้ำตาลมีผลต่อการรักษาอย่างไร?',
+      ].join('\\n');
+      setStatus('ใส่ตัวอย่างแล้ว', 'ok');
+    };
+
+    // auto-load on open
+    loadPublic().catch(() => {});
+  </script>
+</body>
+</html>
+
