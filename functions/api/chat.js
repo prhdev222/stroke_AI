@@ -22,20 +22,32 @@ export async function onRequestOptions() {
   });
 }
 
-function buildSystemPrompt() {
+async function buildSystemPrompt(env) {
+  let g = DEFAULT_GUIDELINES;
+  try {
+    const kv = env?.STROKE_KV;
+    if (kv) {
+      const fromKV = await kv.get('guidelines');
+      if (fromKV && String(fromKV).trim().length > 50) g = String(fromKV);
+    }
+  } catch {
+    // ignore KV errors, fallback to default
+  }
+
   return `คุณคือผู้ช่วยแพทย์ผู้เชี่ยวชาญด้านแนวทางการดูแลผู้ป่วยโรคหลอดเลือดสมองเฉียบพลัน ของโรงพยาบาลสงฆ์
 ตอบเป็นภาษาไทย ชัดเจน กระชับ เป็นขั้นตอน
-หากคำถามอยู่นอกเหนือแนวทาง ให้แนะนำปรึกษาอายุรแพทย์ประสาทวิทยา
+หากคำถามอยู่นอกเหนือแนวทาง/ไม่มีในข้อความแนวทาง ให้บอกว่าไม่มีในแนวทาง และแนะนำปรึกษาอายุรแพทย์ประสาทวิทยา
+ห้ามเดา ห้ามแต่งข้อมูลเพิ่ม
 
 ════ แนวทางการรักษา ════
 
-${DEFAULT_GUIDELINES}
+${g}
 
 ═══════════════════════`;
 }
 
-function normalizeMessages(messages) {
-  const sys = { role: 'system', content: buildSystemPrompt() };
+async function normalizeMessages(env, messages) {
+  const sys = { role: 'system', content: await buildSystemPrompt(env) };
   const safe = Array.isArray(messages) ? messages : [];
   return [sys, ...safe]
     .filter(m => m && typeof m.role === 'string' && typeof m.content === 'string')
@@ -52,6 +64,7 @@ async function callOpenAICompatible({ endpoint, apiKey, model, messages }) {
     body: JSON.stringify({
       model,
       max_tokens: 900,
+      temperature: 0.2,
       messages,
     }),
   });
@@ -72,7 +85,7 @@ export async function onRequestPost(context) {
   }
 
   const provider = String(body?.provider || '').trim();
-  const messages = normalizeMessages(body?.messages);
+  const messages = await normalizeMessages(env, body?.messages);
 
   try {
     if (provider === 'groq') {
