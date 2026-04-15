@@ -1,0 +1,56 @@
+export const DEFAULT_STEPS = [
+  { id: 's1', ico: '🚨', ttl: 'ผู้ป่วยมาถึง', step: 'Step 1', qs: [
+    'ผู้ป่วยมีอาการปากเบี้ยว แขนอ่อนแรง พูดไม่ชัด ต้องทำอะไรก่อนทันที?',
+    'จะประเมิน BEFAST ในห้องฉุกเฉินอย่างไร?',
+    'อาการแบบไหนบ่งชี้ว่าเป็น LVO ต้องประเมิน VAN อย่างไร?',
+    'Stroke fast track คืออะไร ควร activate เมื่อไหร่?',
+    'ต้องวัด V/S และประเมิน Neuro signs อะไรบ้าง?',
+  ]},
+  { id: 's2', ico: '🔬', ttl: 'ส่งตรวจ Lab & EKG', step: 'Step 2', qs: [
+    'Emergency lab ที่ต้องสั่งทันทีมีอะไรบ้าง?',
+    'Other lab (ไม่ด่วน) ที่ควรส่งมีอะไร?',
+    'ทำไมต้องเช็ค DTX ก่อน? ระดับน้ำตาลมีผลต่อการรักษาอย่างไร?',
+    'Coagulogram สำคัญอย่างไรในการตัดสินใจให้ rt-PA?',
+    'EKG ช่วยอะไรในผู้ป่วย Stroke?',
+  ]},
+  { id: 's3', ico: '📊', ttl: 'ประเมิน NIHSS', step: 'Step 3', qs: [
+    'NIHSS ประเมินอะไรบ้าง? มีกี่หัวข้อ คะแนนเต็มเท่าไหร่?',
+    'NIHSS < 4 หมายความว่าอะไร ต้องรักษาอย่างไร?',
+    'NIHSS ≥ 4 onset 3 ชั่วโมง ขั้นตอนต่อไปคืออะไร?',
+    'NIHSS ≥ 6 บ่งชี้อะไร ต้องทำอะไรต่อ?',
+    'NIHSS เปลี่ยนแปลงหลัง rt-PA ต้องติดตามอย่างไร?',
+  ]},
+  { id: 's4', ico: '🖥️', ttl: 'ผล CT Brain', step: 'Step 4', qs: [
+    'CT พบ intracranial hemorrhage ต้องดูแลอย่างไรทันที?',
+    'CT ไม่พบเลือดออก onset 2 ชั่วโมง NIHSS 5 ขั้นตอนต่อไปคืออะไร?',
+    'ASPECT score คืออะไร? score ≥ 6 หมายความว่าอะไร?',
+    'เมื่อไหร่ต้องทำ CTA เพิ่มเติม? CTA ดูอะไร?',
+    'CT brain กับ CTA แตกต่างกันอย่างไร?',
+  ]},
+  { id: 's5', ico: '💊', ttl: 'การรักษา', step: 'Step 5', qs: [
+    'rt-PA คืออะไร? ให้ในกรณีใด? ขนาดยาคำนวณอย่างไร?',
+    'ข้อห้ามใช้ rt-PA (contraindication) มีอะไรบ้าง?',
+    'DAPT คืออะไร ประกอบด้วยยาอะไร? ให้เมื่อไหร่?',
+    'Thrombectomy คืออะไร? เมื่อไหร่ต้อง refer?',
+    'ผู้ป่วย onset 8 ชม. NIHSS 8 ASPECT 7 ไม่มีเลือดออก รักษาอย่างไร?',
+    'ผู้ป่วย onset 2 ชม. NIHSS 10 หลัง rt-PA NIHSS ยัง 8 ต้องทำอะไร?',
+    'ควบคุม BP อย่างไรใน Ischemic stroke และ Hemorrhagic stroke?',
+  ]},
+  { id: 's6', ico: '🏥', ttl: 'Admit & Refer', step: 'Step 6', qs: [
+    'Stroke care map มีอะไรบ้าง ดูแลอะไรหลัง admit?',
+    'เมื่อไหร่ต้อง refer สถาบันประสาทวิทยา?',
+    'ผู้ป่วย onset > 24 ชั่วโมง ต้องทำอย่างไร?',
+    'ผู้ป่วย Hemorrhagic stroke ต้อง refer neurosurgery ทุกรายหรือไม่?',
+    'กรณีมีปัญหาควรปรึกษาใคร?',
+  ]},
+];
+
+export const DEFAULT_GUIDELINES = `แนวทาง Stroke รพ.สงฆ์ มี.ค.68:
+BEFAST: B=เวียนหัวเดินเซ E=ตาพร่า F=ปากเบี้ยว A=แขนขาอ่อนแรง S=พูดไม่ชัด T=เวลาตั้งแต่เริ่มอาการ
+VAN(LVO): V=ตามัวเฉียบพลัน A=Aphasia N=Neglect
+ขั้นตอน: activate fast track→V/S,N/S→lab(DTX,CBC,elyte,coag,EKG)→NIHSS→CT+CXR
+CT hemorrhage: Refer neurosurgery+SBP130-140
+Onset≤4.5ชม: NIHSS<4→DAPT; NIHSS≥4→rt-PA(0.9mg/kg IV max90mg)→NIHSS<6→admit; NIHSS≥6→CTA→LVO→Refer thrombectomy
+Onset4.5-24ชม: NIHSS<6→admit; NIHSS≥6+ASPECT≥6→CTA→LVO→Refer thrombectomy
+>24ชม: admit. ปรึกษาอายุรแพทย์ประสาทวิทยาหากมีปัญหา`;
+

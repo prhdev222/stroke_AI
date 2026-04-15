@@ -1,0 +1,9 @@
+แนวทาง Stroke รพ.สงฆ์ มี.ค.68:
+BEFAST: B=เวียนหัวเดินเซ E=ตาพร่า F=ปากเบี้ยว A=แขนขาอ่อนแรง S=พูดไม่ชัด T=เวลาตั้งแต่เริ่มอาการ
+VAN(LVO): V=ตามัวเฉียบพลัน A=Aphasia N=Neglect
+ขั้นตอน: activate fast track→V/S,N/S→lab(DTX,CBC,elyte,coag,EKG)→NIHSS→CT+CXR
+CT hemorrhage: Refer neurosurgery+SBP130-140
+Onset≤4.5ชม: NIHSS<4→DAPT; NIHSS≥4→rt-PA(0.9mg/kg IV max90mg)→NIHSS<6→admit; NIHSS≥6→CTA→LVO→Refer thrombectomy
+Onset4.5-24ชม: NIHSS<6→admit; NIHSS≥6+ASPECT≥6→CTA→LVO→Refer thrombectomy
+>24ชม: admit. ปรึกษาอายุรแพทย์ประสาทวิทยาหากมีปัญหา
+

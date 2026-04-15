@@ -1,0 +1,11 @@
+name = "stroke-ai"
+compatibility_date = "2026-04-15"
+
+# Cloudflare Pages Functions
+pages_build_output_dir = "."
+
+# KV binding (ใส่ id หลังจากสร้าง namespace แล้ว)
+kv_namespaces = [
+  { binding = "STROKE_KV", id = "b6363f9e1b9645308973b38f2815cd88" }
+]
+

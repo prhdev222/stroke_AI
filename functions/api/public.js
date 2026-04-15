@@ -1,16 +1,7 @@
-/**
- * /api/public — Public read-only endpoint (ไม่ต้อง PIN)
- * ใช้โดย index.html เพื่อดึง steps และ guidelines จาก KV
- *
- * GET /api/public?r=steps      → Quick Steps array
- * GET /api/public?r=guidelines → Guideline text (สำหรับ paid AI ที่ call จาก browser)
- * GET /api/public?r=all        → ทั้งคู่
- */
-
-import { DEFAULT_STEPS, DEFAULT_GUIDELINES } from './admin.js';
+import { DEFAULT_STEPS, DEFAULT_GUIDELINES } from './_defaults.js';
 
 const CORS = {
-  'Content-Type': 'application/json',
+  'Content-Type': 'application/json; charset=utf-8',
   'Access-Control-Allow-Origin': '*',
 };
 
@@ -54,9 +45,7 @@ export async function onRequestGet(context) {
     return new Response(JSON.stringify({ ok: true, ...result }), {
       headers: { ...CORS, 'Cache-Control': 'no-store' },
     });
-
-  } catch (e) {
-    // Fallback to defaults on error
+  } catch (_e) {
     const fallback = {};
     if (r === 'steps' || r === 'all') fallback.steps = DEFAULT_STEPS;
     if (r === 'guidelines' || r === 'all') fallback.guidelines = DEFAULT_GUIDELINES;
@@ -65,3 +54,4 @@ export async function onRequestGet(context) {
     });
   }
 }
+
