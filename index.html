@@ -401,13 +401,14 @@ SBP 130–140 mmHg</div></div>
         (ต้องใส่ PIN จาก <code>ADMIN_PIN</code> ใน Cloudflare env)
       </div>
       <div class="div"></div>
-      <div class="ss">📖 วิธีตั้งค่า Env (Free AI)</div>
+      <div class="ss">📖 วิธีตั้งค่า Env</div>
       <div class="guide">
         <div><b>Cloudflare Pages → Settings → Environment variables</b></div>
         <div style="margin-top:8px">🟢 <b>Free:</b></div>
         <div>• <code>GROQ_API_KEY</code> → <a href="https://console.groq.com" target="_blank">console.groq.com</a></div>
-        <div>• <code>TOGETHER_API_KEY</code> → <a href="https://api.together.ai/settings/api-keys" target="_blank">api.together.ai</a></div>
         <div>• <code>OPENROUTER_API_KEY</code> → <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a></div>
+        <div style="margin-top:6px">💳 <b>Paid:</b></div>
+        <div>• <code>TOGETHER_API_KEY</code> → <a href="https://api.together.ai/settings/api-keys" target="_blank">api.together.ai</a></div>
         <div style="margin-top:6px">💳 <b>Paid (ใส่ Key ในแอป):</b></div>
         <div>• Claude → <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div>
         <div>• OpenAI → <a href="https://platform.openai.com" target="_blank">platform.openai.com</a></div>
@@ -431,10 +432,10 @@ let STEPS = [];        // สำหรับ sidebar
 const PRESETS=[
   {id:'groq',    name:'Groq · LLaMA 3.3 70B',     badge:'FREE',color:'#f97316',type:'proxy',
    envVar:'GROQ_API_KEY',   note:'LLaMA 3.3 70B · Server Key (Env)'},
-  {id:'together',name:'Together AI · Llama 3.1 8B', badge:'FREE',color:'#22c55e',type:'proxy',
-   envVar:'TOGETHER_API_KEY', note:'Together AI · Server Key (Env)'},
   {id:'openrouter',name:'OpenRouter · Llama Free', badge:'FREE',color:'#7c3aed',type:'proxy',
    envVar:'OPENROUTER_API_KEY', note:'Llama 3.1 8B Free · Server Key (Env)'},
+  {id:'together',name:'Together AI · Llama 3 70B', badge:'PAID',color:'#22c55e',type:'proxy',
+   envVar:'TOGETHER_API_KEY', note:'Together AI · Server Key (Env)'},
   {id:'claude',  name:'Claude · Haiku',            badge:'PAID',color:'#c0392b',type:'claude',
    endpoint:'https://api.anthropic.com/v1/messages',model:'claude-haiku-4-5-20251001',
    note:'ใส่ API Key ของคุณ',needKey:true},
