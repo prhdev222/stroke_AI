@@ -91,7 +91,7 @@ export async function onRequestPost(context) {
       const reply = await callOpenAICompatible({
         endpoint: 'https://openrouter.ai/api/v1/chat/completions',
         apiKey: env.OPENROUTER_API_KEY,
-        model: 'meta-llama/llama-3.1-8b-instruct:free',
+        model: 'openrouter/auto',
         messages,
       });
       return json({ reply });
@@ -102,7 +102,7 @@ export async function onRequestPost(context) {
       const reply = await callOpenAICompatible({
         endpoint: 'https://api.together.xyz/v1/chat/completions',
         apiKey: env.TOGETHER_API_KEY,
-        model: 'meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo',
+        model: 'meta-llama/Meta-Llama-3-70B-Instruct-Turbo',
         messages,
       });
       return json({ reply });
